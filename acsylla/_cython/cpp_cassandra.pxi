@@ -14,7 +14,7 @@ cdef extern from "cassandra.h":
     CASS_ERROR_LIB_INDEX_OUT_OF_BOUNDS
     CASS_ERROR_SERVER_SYNTAX_ERROR
     CASS_ERROR_SERVER_INVALID_QUERY
-    
+
   ctypedef enum CassProtocolVersion:
     CASS_PROTOCOL_VERSION_V1 = 1
     CASS_PROTOCOL_VERSION_V2 = 2
@@ -60,7 +60,7 @@ cdef extern from "cassandra.h":
   ctypedef struct CassBatch:
     pass
 
-  ctypedef void (*CassFutureCallback)(CassFuture* future, void* data);  
+  ctypedef void (*CassFutureCallback)(CassFuture* future, void* data);
 
   CassCluster* cass_cluster_new()
   void cass_cluster_free(CassCluster* cluster)
@@ -102,12 +102,16 @@ cdef extern from "cassandra.h":
   CassErrorResult* cass_future_get_error_result(CassFuture* future)
   CassResult* cass_future_get_result(CassFuture* future)
   const CassPrepared* cass_future_get_prepared(CassFuture* future);
- 
+
   CassError cass_error_result_code(CassErrorResult* error_result)
   void cass_error_result_free(CassErrorResult* error_result)
 
   size_t cass_result_row_count(CassResult* result)
   size_t cass_result_column_count(CassResult* result)
+
+  size_t cass_result_column_name(CassResult* result, size_t index, const char** name, size_t* name_lenght)
+  size_t cass_result_column_type(CassResult* result, size_t index)
+
   CassRow* cass_result_first_row(CassResult* result)
   CassIterator* cass_iterator_from_result(const CassResult* result)
   cass_bool_t cass_result_has_more_pages(const CassResult* result)

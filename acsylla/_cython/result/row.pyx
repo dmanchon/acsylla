@@ -13,7 +13,7 @@ cdef class Row:
         # Increase the references to the result object, behind the scenes
         # Cassandra uses the data owned by the result object, so we need to
         # keep the object alive while the row is still in use.
-        row.result = result 
+        row.result = result
 
         return row
 

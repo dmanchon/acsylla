@@ -54,6 +54,19 @@ cdef class Result:
         count = cass_result_row_count(self.cass_result)
         return count
 
+    def column_type(self, str name):
+        cdef size_t index
+        column = None
+        cdef size_t len
+        cdef const char* string
+
+        for i in range(self.column_count()):
+            cass_result_column_name(self.cass_result, i, &string, &len)
+            if string == name:
+                column = cass_result_column_type(self.cass_result, i)
+                break
+        return column
+
     def column_count(self):
         """ Returns the total columns returned"""
         cdef size_t count
@@ -74,7 +87,7 @@ cdef class Result:
         return Row.new_(cass_row, self)
 
     def all(self):
-        """ Return the all rows using of a result, using an 
+        """ Return the all rows using of a result, using an
         iterator.
 
         If there is no rows iterator returns no rows.

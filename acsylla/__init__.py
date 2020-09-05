@@ -17,6 +17,8 @@ from .factories import (
 )
 
 __all__ = (
+    "CassValueType",
+    "CassError",
     "Cluster",
     "Session",
     "Statement",

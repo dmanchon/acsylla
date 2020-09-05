@@ -1,5 +1,18 @@
 from libc.stdlib cimport free
 
+cdef class DataType:
+
+    def __cinit__(self):
+        self.cass_data_type = NULL
+
+    @staticmethod
+    cdef DataType new_(const CassDataType* cass_data_type):
+        cdef DataType data_type
+
+        data_type = DataType()
+        data_type.cass_data_type = cass_data_type
+        return data_type
+
 
 cdef class Value:
 
@@ -26,6 +39,12 @@ cdef class Value:
             raise ColumnValueError()
 
         return output
+
+    def datatype(self):
+        cdef CassDataType* dtype
+
+        dtype = cass_value_data_type(self.cass_value)
+        return DataType.new_(dtype)
 
     def float(self):
         """ Returns the float value of a column.
@@ -74,7 +93,7 @@ cdef class Value:
         # the result. When the result is free up all the space will be free up.
         string = output[:length]
         return string.decode()
-            
+
     def bytes(self):
         """ Returns the bytes value of a column.
 

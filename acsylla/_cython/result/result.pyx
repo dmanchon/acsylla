@@ -54,18 +54,9 @@ cdef class Result:
         count = cass_result_row_count(self.cass_result)
         return count
 
-    def column_type(self, str name):
-        cdef size_t index
-        column = None
-        cdef size_t len
-        cdef const char* string
-
-        for i in range(self.column_count()):
-            cass_result_column_name(self.cass_result, i, &string, &len)
-            if string == name:
-                column = cass_result_column_type(self.cass_result, i)
-                break
-        return column
+    def column_type(self, int i):
+        t = cass_result_column_type(self.cass_result, i)
+        return t == CassValueType.CASS_VALUE_TYPE_VARCHAR
 
     def column_count(self):
         """ Returns the total columns returned"""

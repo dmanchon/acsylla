@@ -7,6 +7,13 @@ cdef extern from "cassandra.h":
     cass_false = 0
     cass_true = 1
 
+  ctypedef struct CassDataType:
+    pass
+
+  ctypedef enum CassValueType:
+    CASS_VALUE_TYPE_INT = 0x09
+    CASS_VALUE_TYPE_VARCHAR = 0x0D
+
   ctypedef enum CassError:
     CASS_OK
     CASS_ERROR_LIB_NO_HOSTS_AVAILABLE
@@ -110,7 +117,7 @@ cdef extern from "cassandra.h":
   size_t cass_result_column_count(CassResult* result)
 
   size_t cass_result_column_name(CassResult* result, size_t index, const char** name, size_t* name_lenght)
-  size_t cass_result_column_type(CassResult* result, size_t index)
+  CassValueType cass_result_column_type(CassResult* result, size_t index)
 
   CassRow* cass_result_first_row(CassResult* result)
   CassIterator* cass_iterator_from_result(const CassResult* result)
@@ -119,6 +126,7 @@ cdef extern from "cassandra.h":
   void cass_result_free(CassResult* result)
 
   const CassValue* cass_row_get_column_by_name(const CassRow* row, const char* name)
+  const CassDataType* cass_value_data_type ( const CassValue* value )
 
   CassError cass_value_get_int32(const CassValue* value, cass_int32_t * output)
   CassError cass_value_get_float(const CassValue* value, cass_float_t* output)
